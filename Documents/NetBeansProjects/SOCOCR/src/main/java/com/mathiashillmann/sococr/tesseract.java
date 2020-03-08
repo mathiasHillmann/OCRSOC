@@ -39,11 +39,13 @@ public class tesseract {
         final Tesseract tessInst = new Tesseract();
         tessInst.setTessVariable("user_defined_dpi", "270");
         tessInst.setLanguage("eng");
-        tessInst.setDatapath("/tessdata/");
-        final List<ITesseract.RenderedFormat> list = new ArrayList<ITesseract.RenderedFormat>();
-        list.add(ITesseract.RenderedFormat.PDF);
+        tessInst.setDatapath("C:\\Users\\mathi\\Documents\\NetBeansProjects\\SOCOCR\\src\\main\\java\\com\\mathiashillmann\\sococr");
+        //final List<ITesseract.RenderedFormat> list = new ArrayList<ITesseract.RenderedFormat>();
+        //list.add(ITesseract.RenderedFormat.PDF);
         try {
-            tessInst.createDocuments(image.getPath(), "C:\\Tess4j", (List)list);
+            //tessInst.createDocuments(image.getPath(), "C:\\Tess4j", (List)list);
+            String result = tessInst.doOCR(image);
+            System.out.println(result);
         }
         catch (TesseractException e) {
             System.err.println(e.getMessage());
