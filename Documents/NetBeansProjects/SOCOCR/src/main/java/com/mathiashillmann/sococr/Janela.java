@@ -69,16 +69,20 @@ public class Janela extends javax.swing.JFrame {
         Sobre = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Digitalizador de ASO");
         setBackground(new java.awt.Color(255, 255, 255));
 
         MenuPrograma.setText("Programa");
 
+        Novo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         Novo.setText("Novo...");
         MenuPrograma.add(Novo);
 
+        AbrirLogs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         AbrirLogs.setText("Abrir logs");
         MenuPrograma.add(AbrirLogs);
 
+        Saida.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         Saida.setText("Sair");
         Saida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,9 +95,11 @@ public class Janela extends javax.swing.JFrame {
 
         MenuAjuda.setText("Ajuda");
 
+        Ajuda.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         Ajuda.setText("Ajuda");
         MenuAjuda.add(Ajuda);
 
+        Sobre.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, 0));
         Sobre.setText("Sobre");
         Sobre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,6 +175,7 @@ public class Janela extends javax.swing.JFrame {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 new Janela().setVisible(true);
+                
             }
         });
     }

@@ -26,12 +26,15 @@ package com.mathiashillmann.sococr;
  *
  * @author Mathias Hillmann
  */
+import java.io.BufferedReader;
 import net.sourceforge.tess4j.TesseractException;
-import java.util.List;
-import net.sourceforge.tess4j.ITesseract;
-import java.util.ArrayList;
 import net.sourceforge.tess4j.Tesseract;
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sourceforge.tess4j.util.LoadLibs;
 
 public class tesseract {
     public static void main(final String[] args) {
@@ -39,16 +42,27 @@ public class tesseract {
         final Tesseract tessInst = new Tesseract();
         tessInst.setTessVariable("user_defined_dpi", "270");
         tessInst.setLanguage("eng");
-        tessInst.setDatapath("C:\\Users\\mathi\\Documents\\NetBeansProjects\\SOCOCR\\src\\main\\java\\com\\mathiashillmann\\sococr");
-        //final List<ITesseract.RenderedFormat> list = new ArrayList<ITesseract.RenderedFormat>();
-        //list.add(ITesseract.RenderedFormat.PDF);
+        File tessDataFolder = LoadLibs.extractTessResources("tessdata");
+        tessInst.setDatapath(tessDataFolder.getAbsolutePath());
         try {
-            //tessInst.createDocuments(image.getPath(), "C:\\Tess4j", (List)list);
             String result = tessInst.doOCR(image);
-            System.out.println(result);
+            BufferedReader br = new BufferedReader(new StringReader(result));
+            String namerequired;
+            String line;
+            int counter = 0;
+            while ((line = br.readLine()) != null) {
+                if (counter == 6) {
+                    namerequired = line;
+                    String sequencial = namerequired.substring(namerequired.length()-9);
+                    System.out.println(sequencial);
+                }
+                counter++;
+            }
         }
         catch (TesseractException e) {
             System.err.println(e.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(tesseract.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
