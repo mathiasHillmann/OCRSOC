@@ -44,7 +44,7 @@ public class SepararFC {
             for (int i = 0; i < Pages.size(); i++) {
                 PDDocument doc = Pages.get(i);
                 if(i > start && i <= end){
-                    doc.save(new File(destino, sequencial + "_" + i + ".pdf"));
+                    doc.save(new File(destino, sequencial + "_fc.pdf"));
                 }
             }
         } catch (IOException e){
