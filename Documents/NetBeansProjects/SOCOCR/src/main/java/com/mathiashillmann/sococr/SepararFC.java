@@ -35,21 +35,16 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  */
 public class SepararFC {
     public static boolean SepararFC(String sequencial, String caminho, String destino) {
-    //Separar ficha clinica do pdf inicial
-        int start = 1;
-        int end = 4;
+        //Separar ficha clinica do pdf inicial
         try (PDDocument document = PDDocument.load(new File(caminho))) {
-            Splitter splitter = new Splitter();
-            List<PDDocument> Pages = splitter.split(document);
-            for (int i = 0; i < Pages.size(); i++) {
-                PDDocument doc = Pages.get(i);
-                if(i > start && i <= end){
-                    doc.save(new File(destino, sequencial + "_fc.pdf"));
-                }
-            }
-        } catch (IOException e){
+            int noOfPages= document.getNumberOfPages();
+            document.removePage(0);
+            document.save(new File(destino, sequencial + "_fc.pdf"));
+            document.close();
+        } 
+        catch (IOException e){
             System.err.println(e);
         }
-    return true;
+        return true;
     }
 }
