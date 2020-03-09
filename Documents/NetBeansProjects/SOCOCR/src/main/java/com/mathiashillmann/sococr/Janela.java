@@ -26,6 +26,9 @@ package com.mathiashillmann.sococr;
  *
  * @author Mathias Hillmann
  */
+import static com.mathiashillmann.sococr.RealizarOCR.RealizarOCR;
+import static com.mathiashillmann.sococr.SepararAso.SepararAso;
+import static com.mathiashillmann.sococr.SepararFC.SepararFC;
 import java.awt.EventQueue;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.util.logging.Level;
@@ -37,10 +40,15 @@ import java.awt.event.ActionEvent;
 import java.awt.LayoutManager;
 import javax.swing.GroupLayout;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JFrame;
+import net.sourceforge.tess4j.TesseractException;
 public class Janela extends javax.swing.JFrame {
 
     /**
@@ -59,6 +67,7 @@ public class Janela extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuPrograma = new javax.swing.JMenu();
         Novo = new javax.swing.JMenuItem();
@@ -68,6 +77,9 @@ public class Janela extends javax.swing.JFrame {
         Ajuda = new javax.swing.JMenuItem();
         Sobre = new javax.swing.JMenuItem();
 
+        fileChooser.setDialogTitle("This is my open dialog");
+        fileChooser.setFileFilter(new com.mathiashillmann.sococr.FiltroPDF());
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Digitalizador de ASO");
         setBackground(new java.awt.Color(255, 255, 255));
@@ -76,6 +88,11 @@ public class Janela extends javax.swing.JFrame {
 
         Novo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         Novo.setText("Novo...");
+        Novo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NovoActionPerformed(evt);
+            }
+        });
         MenuPrograma.add(Novo);
 
         AbrirLogs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
@@ -140,6 +157,29 @@ public class Janela extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Desenvolvido por Mathias Ant\u00f4nio de Oliveira Hillmann", "Sobre", 1);
     }//GEN-LAST:event_SobreActionPerformed
 
+    private void NovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NovoActionPerformed
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            String caminho = file.getAbsolutePath();
+            System.out.println(caminho);
+            String destino = file.getParent();
+            System.out.println(destino);
+            String sequencial = null;
+            try {
+                sequencial = RealizarOCR(caminho);
+            } catch (TesseractException | IOException ex) {
+                Logger.getLogger(Janela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(sequencial);
+            boolean SepararAso = SepararAso(sequencial, caminho, destino);
+            System.out.println(SepararAso);
+            boolean SepararFC = SepararFC(sequencial, caminho, destino);
+            System.out.println(SepararFC);
+        }
+        
+    }//GEN-LAST:event_NovoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -170,12 +210,11 @@ public class Janela extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new JFrame("FooRendererTest");
+                JFrame frame = new JFrame("Programa");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();
                 frame.setLocationRelativeTo(null);
-                new Janela().setVisible(true);
-                
+                new Janela().setVisible(true);    
             }
         });
     }
@@ -188,6 +227,7 @@ public class Janela extends javax.swing.JFrame {
     private javax.swing.JMenuItem Novo;
     private javax.swing.JMenuItem Saida;
     private javax.swing.JMenuItem Sobre;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 }
