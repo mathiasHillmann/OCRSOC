@@ -50,7 +50,7 @@ public class DadosPorSequencial {
         httpUrlConnInfWebSvc.setRequestMethod("GET");
         httpUrlConnInfWebSvc.setRequestProperty("Content-Type","application/soap+xml; charset=utf-8");
         OutputStreamWriter infWebSvcReqWriter = new OutputStreamWriter(httpUrlConnInfWebSvc.getOutputStream());
-        String infWebSvcRequestMessage = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://services.soc.age.com/\"> <soapenv:Header/> <soapenv:Body> <ser:exportaDadosWs> <!--Optional:--> <arg0> <!--Optional:--> <arquivo>cid:619844239465</arquivo> <!--Optional:--> <campoLivre1>?</campoLivre1> <!--Optional:--> <campoLivre2>?</campoLivre2> <!--Optional:--> <campoLivre3>?</campoLivre3> <!--Optional:--> <campoLivre4>?</campoLivre4> <!--Optional:--> <campoLivre5>?</campoLivre5> <erro>?</erro> <!--Optional:--> <mensagemErro>?</mensagemErro> <!--Optional:--> <parametros>{'empresa':'62168','codigo':'9393','chave':'80e832c7afb77571d678','tipoSaida':'xml','sequencialFicha':'134369610'}</parametros> <!--Optional:--> <retorno>xml</retorno> <!--Optional:--> <tipoArquivoRetorno>xml</tipoArquivoRetorno> </arg0> </ser:exportaDadosWs> </soapenv:Body> </soapenv:Envelope>";
+        String infWebSvcRequestMessage = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://services.soc.age.com/\"> <soapenv:Header/> <soapenv:Body> <ser:exportaDadosWs> <!--Optional:--> <arg0> <!--Optional:--> <arquivo>cid:619844239465</arquivo> <!--Optional:--> <campoLivre1>?</campoLivre1> <!--Optional:--> <campoLivre2>?</campoLivre2> <!--Optional:--> <campoLivre3>?</campoLivre3> <!--Optional:--> <campoLivre4>?</campoLivre4> <!--Optional:--> <campoLivre5>?</campoLivre5> <erro>?</erro> <!--Optional:--> <mensagemErro>?</mensagemErro> <!--Optional:--> <parametros>{'empresa':'62168','codigo':'9393','chave':'80e832c7afb77571d678','tipoSaida':'xml','sequencialFicha':'"+sequencial+"'}</parametros> <!--Optional:--> <retorno>xml</retorno> <!--Optional:--> <tipoArquivoRetorno>xml</tipoArquivoRetorno> </arg0> </ser:exportaDadosWs> </soapenv:Body> </soapenv:Envelope>";
         infWebSvcReqWriter.write(infWebSvcRequestMessage);
         infWebSvcReqWriter.flush();
         BufferedReader infWebSvcReplyReader = new BufferedReader(new InputStreamReader(httpUrlConnInfWebSvc.getInputStream()));
@@ -62,7 +62,6 @@ public class DadosPorSequencial {
         infWebSvcReqWriter.close();
         infWebSvcReplyReader.close();
         httpUrlConnInfWebSvc.disconnect();
-        System.out.println(RetornoWS);
         return RetornoWS;
     }
 }
