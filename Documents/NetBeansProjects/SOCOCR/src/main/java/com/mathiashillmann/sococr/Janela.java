@@ -26,29 +26,21 @@ package com.mathiashillmann.sococr;
  *
  * @author Mathias Hillmann
  */
+import static com.mathiashillmann.sococr.DadosPorSequencial.DadosPorSequencial;
 import static com.mathiashillmann.sococr.RealizarOCR.RealizarOCR;
 import static com.mathiashillmann.sococr.SepararAso.SepararAso;
 import static com.mathiashillmann.sococr.SepararFC.SepararFC;
-import java.awt.EventQueue;
-import javax.swing.UnsupportedLookAndFeelException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import java.awt.event.ActionEvent;
-import java.awt.LayoutManager;
-import javax.swing.GroupLayout;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JFrame;
 import net.sourceforge.tess4j.TesseractException;
+import org.apache.commons.lang.StringUtils;
+
 public class Janela extends javax.swing.JFrame {
 
     /**
@@ -68,6 +60,8 @@ public class Janela extends javax.swing.JFrame {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
+        Fundo = new javax.swing.JPanel();
+        jProgressBar = new javax.swing.JProgressBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuPrograma = new javax.swing.JMenu();
         Novo = new javax.swing.JMenuItem();
@@ -83,6 +77,21 @@ public class Janela extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Digitalizador de ASO");
         setBackground(new java.awt.Color(255, 255, 255));
+
+        Fundo.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout FundoLayout = new javax.swing.GroupLayout(Fundo);
+        Fundo.setLayout(FundoLayout);
+        FundoLayout.setHorizontalGroup(
+            FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+        );
+        FundoLayout.setVerticalGroup(
+            FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FundoLayout.createSequentialGroup()
+                .addGap(0, 264, Short.MAX_VALUE)
+                .addComponent(jProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         MenuPrograma.setText("Programa");
 
@@ -133,11 +142,11 @@ public class Janela extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addComponent(Fundo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+            .addComponent(Fundo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -158,24 +167,44 @@ public class Janela extends javax.swing.JFrame {
     }//GEN-LAST:event_SobreActionPerformed
 
     private void NovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NovoActionPerformed
+        jProgressBar.setStringPainted(true);
+        jProgressBar.setValue(0);
+        Fundo.add(jProgressBar);
+        setContentPane(Fundo);
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             String caminho = file.getAbsolutePath();
-            System.out.println(caminho);
             String destino = file.getParent();
-            System.out.println(destino);
             String sequencial = null;
+            String RetornoWS = null;
             try {
                 sequencial = RealizarOCR(caminho);
             } catch (TesseractException | IOException ex) {
-                Logger.getLogger(Janela.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex);
             }
-            System.out.println(sequencial);
-            boolean SepararAso = SepararAso(sequencial, caminho, destino);
-            System.out.println(SepararAso);
-            boolean SepararFC = SepararFC(sequencial, caminho, destino);
-            System.out.println(SepararFC);
+            try {
+                boolean SepararAso = SepararAso(sequencial, caminho, destino);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            try {
+                boolean SepararFC = SepararFC(sequencial, caminho, destino);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            try {
+                DadosPorSequencial(sequencial);
+                System.out.println(RetornoWS);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            String Codempresa = StringUtils.substringBetween(RetornoWS,"&lt;CODIGOEMPRESA>","&lt;/CODIGOEMPRESA>");
+            String Codfuncionario = StringUtils.substringBetween(RetornoWS,"&lt;CODIGOFUNCIONARIO>","&lt;/CODIGOFUNCIONARIO>");
+            System.out.println(Codempresa);
+            System.out.println(Codfuncionario);
+            JOptionPane.showMessageDialog(null, "Pronto");
+            
         }
         
     }//GEN-LAST:event_NovoActionPerformed
@@ -222,6 +251,7 @@ public class Janela extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AbrirLogs;
     private javax.swing.JMenuItem Ajuda;
+    private javax.swing.JPanel Fundo;
     private javax.swing.JMenu MenuAjuda;
     private javax.swing.JMenu MenuPrograma;
     private javax.swing.JMenuItem Novo;
@@ -229,5 +259,6 @@ public class Janela extends javax.swing.JFrame {
     private javax.swing.JMenuItem Sobre;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JProgressBar jProgressBar;
     // End of variables declaration//GEN-END:variables
 }

@@ -35,7 +35,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  * @author Mathias Hillmann
  */
 public class SepararAso {
-    public static boolean SepararAso(String sequencial, String caminho, String destino) {
+    public static boolean SepararAso(String sequencial, String caminho, String destino) throws IOException {
     //Separar aso do pdf inicial
             try (PDDocument document = PDDocument.load(new File(caminho))) {
             Splitter splitter = new Splitter();
@@ -46,12 +46,9 @@ public class SepararAso {
             int i = 1;
             while (iterator.hasNext()) {
                 PDDocument pd = iterator.next();
-                pd.save("C:\\Tess4j\\"+sequencial+"_aso.pdf");
+                pd.save(destino+"\\"+sequencial+"_aso.pdf");
                 i++;
             }
-
-            } catch (IOException e){
-                System.err.println("Não foi possivel criar aso: " + e);
             }
         return true;
     }

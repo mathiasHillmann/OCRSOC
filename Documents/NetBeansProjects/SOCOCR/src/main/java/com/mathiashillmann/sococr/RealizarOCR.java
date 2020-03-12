@@ -40,7 +40,7 @@ public class RealizarOCR {
         //OCR para pegar sequencial da ficha
         final File image = new File(caminho);
         final Tesseract tessInst = new Tesseract();
-        tessInst.setTessVariable("user_defined_dpi", "270");
+        tessInst.setTessVariable("user_defined_dpi", "300");
         tessInst.setLanguage("eng");
         File tessDataFolder = LoadLibs.extractTessResources("tessdata");
         tessInst.setDatapath(tessDataFolder.getAbsolutePath());

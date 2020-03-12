@@ -25,8 +25,6 @@ package com.mathiashillmann.sococr;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
@@ -34,17 +32,14 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  * @author Mathias Hillmann
  */
 public class SepararFC {
-    public static boolean SepararFC(String sequencial, String caminho, String destino) {
+    public static boolean SepararFC(String sequencial, String caminho, String destino) throws IOException {
         //Separar ficha clinica do pdf inicial
         try (PDDocument document = PDDocument.load(new File(caminho))) {
-            int noOfPages= document.getNumberOfPages();
+            //int noOfPages= document.getNumberOfPages();
             document.removePage(0);
             document.save(new File(destino, sequencial + "_fc.pdf"));
             document.close();
         } 
-        catch (IOException e){
-            System.err.println(e);
-        }
         return true;
     }
 }
