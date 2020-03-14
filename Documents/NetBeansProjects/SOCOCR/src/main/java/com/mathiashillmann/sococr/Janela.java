@@ -34,6 +34,9 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -48,6 +51,11 @@ public class Janela extends javax.swing.JFrame {
      */
     public Janela() {
         initComponents();
+        try{
+        String destino = CriarPasta();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
 
     /**
@@ -167,17 +175,13 @@ public class Janela extends javax.swing.JFrame {
     }//GEN-LAST:event_SobreActionPerformed
 
     private void NovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NovoActionPerformed
-        jProgressBar.setStringPainted(true);
-        jProgressBar.setValue(0);
-        Fundo.add(jProgressBar);
-        setContentPane(Fundo);
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             String caminho = file.getAbsolutePath();
-            String destino = file.getParent();
             String sequencial = null;
             String RetornoWS = null;
+            System.out.println(destino);
             try {
                 sequencial = RealizarOCR(caminho);
             } catch (TesseractException | IOException ex) {
@@ -194,8 +198,7 @@ public class Janela extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, ex);
             }
             try {
-                DadosPorSequencial(sequencial);
-                System.out.println(RetornoWS);
+                RetornoWS = DadosPorSequencial(sequencial);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
@@ -212,7 +215,7 @@ public class Janela extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -234,16 +237,16 @@ public class Janela extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
+        //</editor-fold>        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 JFrame frame = new JFrame("Programa");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();
                 frame.setLocationRelativeTo(null);
-                new Janela().setVisible(true);    
+                new Janela().setVisible(true);
             }
         });
     }
@@ -261,4 +264,15 @@ public class Janela extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JProgressBar jProgressBar;
     // End of variables declaration//GEN-END:variables
+
+    private String CriarPasta() throws IOException {
+        String destino = System.getProperty("java.io.tmpdir") + "IntegradorSOC\\";
+            // folder to create temporary directory
+            Path folder = Paths.get("dir");
+            // create temporary folder
+            Path path = Files.createTempDirectory(folder, "java-");
+            // print path
+            System.out.println(path.toAbsolutePath().toString());
+        return path.toString();
+    }
 }

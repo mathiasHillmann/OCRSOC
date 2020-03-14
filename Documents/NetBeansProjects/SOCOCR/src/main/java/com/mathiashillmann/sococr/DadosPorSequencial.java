@@ -62,6 +62,7 @@ public class DadosPorSequencial {
         infWebSvcReqWriter.close();
         infWebSvcReplyReader.close();
         httpUrlConnInfWebSvc.disconnect();
+        System.out.println(RetornoWS);
         return RetornoWS;
     }
 }
