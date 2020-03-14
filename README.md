@@ -15,3 +15,6 @@ A fazer
 
 ## BPM
 ![enter image description here](https://i.imgur.com/LmUFWh0.png)
+
+## Licença
+[MIT](https://github.com/mathiasHillmann/OCRSOC/blob/master/LICENSE)
