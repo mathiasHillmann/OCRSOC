@@ -34,25 +34,21 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.io.FileUtils;
 
 public class Janela extends javax.swing.JFrame {
-
+String destino = null;
     /**
      * Creates new form Janela
      */
     public Janela() {
         initComponents();
         try{
-        String destino = CriarPasta();
+        String destino = CriarPastaTemporaria();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -74,6 +70,7 @@ public class Janela extends javax.swing.JFrame {
         MenuPrograma = new javax.swing.JMenu();
         Novo = new javax.swing.JMenuItem();
         AbrirLogs = new javax.swing.JMenuItem();
+        jConfigurações = new javax.swing.JMenuItem();
         Saida = new javax.swing.JMenuItem();
         MenuAjuda = new javax.swing.JMenu();
         Ajuda = new javax.swing.JMenuItem();
@@ -115,6 +112,15 @@ public class Janela extends javax.swing.JFrame {
         AbrirLogs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         AbrirLogs.setText("Abrir logs");
         MenuPrograma.add(AbrirLogs);
+
+        jConfigurações.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
+        jConfigurações.setText("Configurações");
+        jConfigurações.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jConfiguraçõesActionPerformed(evt);
+            }
+        });
+        MenuPrograma.add(jConfigurações);
 
         Saida.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         Saida.setText("Sair");
@@ -212,8 +218,13 @@ public class Janela extends javax.swing.JFrame {
         
     }//GEN-LAST:event_NovoActionPerformed
 
+    private void jConfiguraçõesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jConfiguraçõesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jConfiguraçõesActionPerformed
+
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
@@ -228,26 +239,17 @@ public class Janela extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>        
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("Programa");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                new Janela().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Programa");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            new Janela().setVisible(true);
         });
     }
 
@@ -261,18 +263,26 @@ public class Janela extends javax.swing.JFrame {
     private javax.swing.JMenuItem Saida;
     private javax.swing.JMenuItem Sobre;
     private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JMenuItem jConfigurações;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JProgressBar jProgressBar;
     // End of variables declaration//GEN-END:variables
 
-    private String CriarPasta() throws IOException {
-        String destino = System.getProperty("java.io.tmpdir") + "IntegradorSOC\\";
-            // folder to create temporary directory
-            Path folder = Paths.get("dir");
-            // create temporary folder
-            Path path = Files.createTempDirectory(folder, "java-");
-            // print path
-            System.out.println(path.toAbsolutePath().toString());
-        return path.toString();
+    private String CriarPastaTemporaria() throws IOException {
+        String path = System.getProperty("java.io.tmpdir");
+        path = path+"IntegraSOC\\";
+        System.out.println(path);
+        File file = new File(path);
+        if (!file.exists()) {
+            if (file.mkdir()) {
+                System.out.println("Directory is created!");
+            } else {
+                System.out.println("ops");
+            }
+        } else {
+            FileUtils.deleteDirectory(file);
+            file.mkdir();
+        }
+    return null;   
     }
 }
