@@ -14,4 +14,4 @@ Requerimentos mínimos para rodar o programa:
 A fazer
 
 ## BPM
-![enter image description here](https://i.imgur.com/J6Q24yd.png)
+![enter image description here](https://i.imgur.com/LmUFWh0.png)
